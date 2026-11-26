@@ -9,46 +9,55 @@ wait = WebDriverWait(driver, 10)
 try:
     driver.get("https://www.saucedemo.com/")
 
+    # Mencari username field dan diisi sebuah value yang telah di sediakan
     username = wait.until(
         EC.visibility_of_element_located((By.ID, "user-name"))
     )
     username.send_keys("standard_user")
 
+    # Mencari password field dan diisi sebuah value yang telah disediakan
     password = wait.until(
         EC.visibility_of_element_located((By.ID, "password"))
     )
     password.send_keys("secret_sauce")
 
+    # Mencari elemen login button lalu di klik
     login_button = wait.until(
         EC.element_to_be_clickable((By.ID, "login-button"))
     )
     login_button.click()
 
+    # Tunggu sampai pindah page di cek melalui URL
     wait.until(EC.url_contains("inventory"))
     print("Login success")
 
+    # Mencari elemen add button dari product yang dipilih lalu di klik untuk ditambahkan ke cart
     add_button = wait.until(
         EC.element_to_be_clickable((By.ID, "add-to-cart-sauce-labs-bolt-t-shirt"))
     )
     add_button.click()
 
+    # Mencari elemen logo cart
     cart_badge = wait.until(
         EC.visibility_of_element_located(
             (By.CLASS_NAME, "shopping_cart_badge")
         )
     )
 
+    # Memastikan bahwa cart sekarang isinya telah bertambah jadi 1
     assert cart_badge.text == "1"
     print("Cart badge verification passed!")
 
+    # Mencari button/logo cart untuk pindah page
     cart_button = wait.until(
         EC.visibility_of_element_located((By.CLASS_NAME, "shopping_cart_link"))
     )
-
     cart_button.click()
 
+    # Tunggu sampai page pindah berdasarkan URL
     wait.until(EC.url_contains("cart"))
 
+    # Mencari product yang telah ditambahkan berdasarkan namanya
     product = wait.until(
         EC.visibility_of_element_located(
             (
@@ -58,11 +67,13 @@ try:
         )
     )
 
+    # Menambahkan assert untuk memastikan bahwa product yang ditambahkan tadi telah berada di cart page
     assert product.text == "Sauce Labs Bolt T-Shirt"
 
     print("Product verification passed!")
     print("ADD TO CART TEST PASSED!")
 
+    # Ambil screenshot
     driver.save_screenshot("add_to_cart_result.png")
 
 finally:
